@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dark Mode Cookie</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+            text-align: center;
+        }
+
+        html {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            background-color: #111111;
+        }
+
+        body {
+            width: 400px;
+            height: 300vh;
+            background-color: rgb(215, 236, 255);
+            transition: background-color 1s;
+        }
+
+        section.content {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border-bottom: 1px solid black;
+        }
+
+        section.content-one {
+            justify-content: space-between;
+            text-align: center;
+            padding-bottom: 20px;
+        }
+        
+
+        .dark-mode {
+            color: whitesmoke;
+            background-color: gray;
+        }
+
+        button::before {
+            content: "🌞";
+        }
+
+        .dark-mode button::before {
+            content: "🌚";
+        }
+
+        .dark-mode .box {
+            background-color: whitesmoke !important;
+            color: gray;
+        }
+
+        .dark-mode .circle {
+            background-color: black !important;
+            
+        }
+    </style>
+</head>
+<body>
+    <section class="content content-one">
+        <div style="display: flex; align-items: center; flex-direction: column;">
+            <button onclick="toggleDarkMode()" style="width: 30px;"></button>
+            <br>
+            <p style="font-size: 20px;">The Wedding of</p>
+            <h1 style="font-size: 30px;">John and Jane</h1>
+        </div>
+        <div>
+            <p style="font-size: 20px; font-weight: bold;">Friday, February 10 2024</p>
+            <span id="timer" style="font-size: 35px; font-weight: bold;"></span>
+        </div>
+        <div>
+            <p style="font-size: 18px;">Kepada Yth.</p>
+            <p style="font-size: 18px;">Fabian Siauw, Ph.D.</p>
+        </div>
+    </section>
+    <section class="content content-two">
+        <h1>The Beloved<br>John and Jane</h1>
+        <p style="font-size: 20px">Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptates repellendus aspernatur alias dicta consequatur deleniti nisi porro ipsa, veniam sunt aperiam ratione, fugit at recusandae soluta exercitationem facilis suscipit blanditiis?</p>
+        <div style="margin: auto;">
+            <div class="box" style="width: 250px; height: 350px; background-color: gray; border-radius: 10px; display: flex; justify-content: center; align-items: center; flex-direction: column;">
+                <div class="circle" style="border-radius: 50%; height: 200px; width: 200px; background-color: white;"></div>
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Impedit deleniti, dignissimos repellat sit recusandae magni quisquam dolorem! Quibusdam, reiciendis distinctio.
+            </div>
+        </div>
+    </section>
+    <section class="content content-three">
+        <h1 style="font-size: 40px; padding-top: 50px;">We Hope You Come!</h1>
+        <p style="font-size: 20px; text-align: center; margin-top: 100px;">
+            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Sit corporis repellendus labore quae eius, eveniet error doloribus, qui harum accusamus necessitatibus dolores nobis voluptatibus suscipit voluptatem reprehenderit, facilis temporibus eos?
+        </p>
+    </section>
+
+    <script>
+        const darkModeBtn = document.querySelector("button");
+
+        if (getCookie("darkMode") === "true") {
+            document.body.classList.add("dark-mode");
+        }
+
+        function toggleDarkMode() {
+            const isDarkMode = document.body.classList.contains("dark-mode");
+            
+            if (isDarkMode) {
+                document.body.classList.remove("dark-mode");
+                deleteCookie("darkMode");
+            } else {
+                document.body.classList.add("dark-mode");
+                setCookie("darkMode", "true", 365);
+            }
+        }
+
+        const countDownDate = new Date("February 10, 2024").getTime();
+
+        const timer = setInterval(() => {
+            const countDownDate = new Date("February 10, 2024").getTime();
+            const now = new Date().getTime();
+            const timeLeft = countDownDate - now;
+    
+            const days = ~~(timeLeft / (1000 * 60 * 60 * 24));
+            const hours = ~~((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = ~~((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = ~~((timeLeft % (1000 * 60)) / 1000);
+
+            document.getElementById("timer").innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+
+            if (timeLeft < 0) {
+                clearInterval(x);
+                document.getElementById("timer").innerHTML = "Event has started!";
+            }
+        }, 1000);
+
+        function getCookie(name){
+            const cookieDecoded = decodeURIComponent(document.cookie);
+            const cookieArr = cookieDecoded.split("; ");
+            let result = null;
+
+            cookieArr.forEach(element => {
+                if (element.indexOf(name) === 0) {
+                    result = element.substring(name.length + 1);
+                }
+            });
+
+            return result;
+        }
+
+        function setCookie(name, value, dayToLive) {
+            const date = new Date();
+            date.setTime(date.getTime() + dayToLive * 24 * 60 * 60 * 1000);
+            const expires = "expires=" + date.toUTCString();
+            document.cookie = `${name}=${value}; ${expires}; path=/`;
+        }
+
+        function deleteCookie(name){
+            setCookie(name, null, null);
+        }
+    </script>
+</body>
+</html>
